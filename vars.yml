@@ -1,0 +1,24 @@
+director_name: bosh-director
+internal_cidr: 10.0.1.0/24
+internal_gw: 10.0.1.1
+internal_ip: 10.0.1.10
+external_ip: 58.186.85.124
+auth_url: 
+az: 
+default_key_name: bosh
+default_security_groups: [bosh]
+net_id: 
+router_id: 
+openstack_domain: 
+openstack_username: 
+openstack_password: ""
+openstack_project:
+region:
+postgres_host:
+postgres_user: 
+postgres_password: 
+s3_ceph_host: 
+s3_ceph_bucket: 
+s3_ceph_access_key: 
+s3_ceph_secret_key:
+s3_ceph_director_bucket: 

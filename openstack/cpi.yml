@@ -3,20 +3,20 @@
   type: replace
   value:
     name: bosh-openstack-cpi
-    sha1: 7c9be83eb11214db85ef5320f26ec9db8fab353f
-    url: https://bosh.io/d/github.com/cloudfoundry/bosh-openstack-cpi-release?v=44
-    version: 44
+    sha1: 7a568d3cff36c562393904f7217453b9139e36e9
+    url: https://github.com/bi1ty/bosh-releases/releases/download/1.0/bosh-openstack-cpi-release-1.0.tgz
+    version: 1.0
 - name: stemcell
   path: /resource_pools/name=vms/stemcell?
   type: replace
   value:
-    sha1: d3f9af952474cd298489d43b0a90f5f769ce7055
-    url: https://bosh-core-stemcells.s3-accelerate.amazonaws.com/621.113/bosh-stemcell-621.113-openstack-kvm-ubuntu-xenial-go_agent.tgz
+    sha1: 4ac4a2b5e1c2f210ec952eaa73df2691a6525e67
+    url: https://bosh-core-stemcells.s3-accelerate.amazonaws.com/621.125/bosh-stemcell-621.125-openstack-kvm-ubuntu-xenial-go_agent.tgz
 - path: /resource_pools/name=vms/cloud_properties?
   type: replace
   value:
     availability_zone: ((az))
-    instance_type: m1.xlarge
+    instance_type: R16_C8_PASS
 - path: /networks/name=default/subnets/0/cloud_properties?
   type: replace
   value:
@@ -33,9 +33,9 @@
     db:
       adapter: postgres
       database: bosh
-      host: 127.0.0.1
+      host: ((postgres_host))
       password: ((postgres_password))
-      user: postgres
+      user: ((postgres_user))
     endpoint: http://registry:((registry_password))@((internal_ip)):25777
     host: ((internal_ip))
     password: ((registry_password))

@@ -17,8 +17,8 @@ instance_groups:
     release: bpm
   - name: nats
     release: bosh
-  - name: postgres-10
-    release: bosh
+  # - name: postgres-10
+  #   release: bosh
   - name: blobstore
     release: bosh
   - name: director
@@ -37,13 +37,21 @@ instance_groups:
         bosh:
           blobstores:
           - options:
-              endpoint: https://((internal_ip)):25250
-              password: ((blobstore_agent_password))
-              tls:
-                cert:
-                  ca: ((blobstore_ca.certificate))
-              user: agent
-            provider: dav
+              # endpoint: https://((internal_ip)):25250
+              # password: ((blobstore_agent_password))
+              # tls:
+              #   cert:
+              #     ca: ((blobstore_ca.certificate))
+              # user: agent
+              access_key_id: ((s3_ceph_access_key))
+              secret_access_key: ((s3_ceph_secret_key))
+              bucket_name: ((s3_ceph_bucket))
+              host: ((s3_ceph_host))
+              address: ((s3_ceph_host))
+              s3_port: 443
+              s3_region: us-east-1
+            # provider: dav
+            provider: s3
           ntp:
           - time1.google.com
           - time2.google.com
@@ -51,29 +59,37 @@ instance_groups:
           - time4.google.com
       mbus: nats://nats:((nats_password))@((internal_ip)):4222
     blobstore:
-      address: ((internal_ip))
+      # address: ((internal_ip))
+      address: ((s3_ceph_host))
       agent:
         password: ((blobstore_agent_password))
         user: agent
       director:
         password: ((blobstore_director_password))
         user: director
-      port: 25250
-      provider: dav
+      # port: 25250
+      # provider: dav
       tls:
         cert:
           ca: ((blobstore_ca.certificate))
           certificate: ((blobstore_server_tls.certificate))
           private_key: ((blobstore_server_tls.private_key))
+      provider: s3
+      access_key_id: ((s3_ceph_access_key))
+      secret_access_key: ((s3_ceph_secret_key))
+      bucket_name: ((s3_ceph_bucket))
+      host: ((s3_ceph_host))
+      s3_port: 443
+      s3_region: us-east-1
     director:
       address: 127.0.0.1
       db:
         adapter: postgres
         database: bosh
-        host: 127.0.0.1
-        listen_address: 127.0.0.1
+        host: ((postgres_host))
+        listen_address: ((postgres_host))
         password: ((postgres_password))
-        user: postgres
+        user: ((postgres_user))
       enable_dedicated_status_worker: true
       enable_nats_delivered_templates: true
       enable_post_deploy: true
@@ -96,6 +112,16 @@ instance_groups:
             password: ((hm_password))
         provider: local
       workers: 4
+      backend_port: 25556
+      backup_destination:
+        options:
+          access_key_id: ((s3_ceph_access_key))
+          bucket_name: ((s3_ceph_director_bucket))
+          credentials_source: static
+          host: ((s3_ceph_host))
+          region: us-east-1
+          secret_access_key: ((s3_ceph_secret_key))
+        provider: s3
     hm:
       director_account:
         ca_cert: ((director_ssl.ca))
@@ -120,13 +146,13 @@ instance_groups:
           certificate: ((nats_server_tls.certificate))
           private_key: ((nats_server_tls.private_key))
       user: nats
-    postgres:
-      adapter: postgres
-      database: bosh
-      host: 127.0.0.1
-      listen_address: 127.0.0.1
-      password: ((postgres_password))
-      user: postgres
+    # postgres: &database
+    #   adapter: postgres
+    #   database: bosh
+    #   host: ((postgres_host))
+    #   listen_address: ((postgres_host))
+    #   password: ((postgres_password))
+    #   user: ((postgres_user))
   resource_pool: vms
 name: bosh
 networks:

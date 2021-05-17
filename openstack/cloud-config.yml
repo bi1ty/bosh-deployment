@@ -12,10 +12,10 @@ azs:
 vm_types:
 - name: default
   cloud_properties:
-    instance_type: m1.small
+    instance_type: R2_C1_PASS
 - name: large
   cloud_properties:
-    instance_type: m1.xlarge
+    instance_type: R16_C8_PASS
 
 disk_types:
 - name: default
